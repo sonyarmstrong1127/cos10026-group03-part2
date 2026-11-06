@@ -1,0 +1,387 @@
+/*
+filename: styles.css
+author: COS10026 Group 03
+created: 26 October 2026
+description: Shared stylesheet. Each owner edits only their own PAGE section.
+*/
+
+/* ===== Base ===== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #222222;
+  background-color: #ffffff;
+}
+
+main {
+  max-width: 60em;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a:focus, input:focus, select:focus, textarea:focus, button:focus {
+  outline: 3px solid #0b5394;
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip-link:focus {
+  left: 0;
+  padding: 0.5em 1em;
+  background-color: #ffffff;
+}
+
+/* ===== Header, menu, footer (shared) ===== */
+header, footer {
+  padding: 1em;
+  color: #ffffff;
+  background-color: #1b5e20;
+}
+
+header a, footer a {
+  color: #ffffff;
+}
+
+.brand {
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+nav ul, footer ul {
+  margin: 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav li, footer li {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+nav a[aria-current="page"] {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* ===== PAGE: index.html (owner: Huy) ===== */
+.home-hero {
+  margin-bottom: 1.5em;
+  padding: 2em 1em;
+  text-align: center;
+  background-color: #fff3e0;
+  background-image: repeating-linear-gradient(45deg, #fff3e0 0, #fff3e0 20px, #ffe0b2 20px, #ffe0b2 40px);
+  border-radius: 8px;
+}
+
+.home-hero h1 {
+  margin-top: 0;
+  font-size: 2.4em;
+  color: #1b5e20;
+}
+
+.home-hero img {
+  border: 4px solid #ffffff;
+  border-radius: 8px;
+}
+
+.services-table {
+  width: 100%;
+  margin: 1em 0;
+  border-collapse: collapse;
+}
+
+.services-table caption {
+  padding: 0.5em 0;
+  font-weight: bold;
+  text-align: left;
+}
+
+.services-table th,
+.services-table td {
+  padding: 0.5em 0.75em;
+  text-align: left;
+  border: 2px solid #000000;
+}
+
+.services-table thead th {
+  color: #ffffff;
+  background-color: #1b5e20;
+}
+
+.services-table tbody th {
+  background-color: #e8f5e9;
+}
+
+.services-table tbody tr:hover td {
+  background-color: #fff3e0;
+}
+
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.search-form input[type="search"] {
+  flex: 1 1 14em;
+  max-width: 24em;
+  padding: 0.4em;
+}
+
+.search-form button {
+  padding: 0.45em 1.2em;
+  color: #ffffff;
+  background-color: #1b5e20;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-form button:hover {
+  background-color: #e65100;
+}
+
+.acknowledgement {
+  margin-top: 1.5em;
+  padding: 1em;
+  background-color: #fff8e1;
+  border-left: 6px solid #e65100;
+}
+
+/* ===== PAGE: jobs.html (owner: Nghia) ===== */
+.jobs-container::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.jobs-aside {
+  float: right;
+  width: 25%;
+  margin: 1.5em 0 1em 1.5em;
+  padding: 1.5em;
+  border: 2px solid #1b5e20;
+  border-radius: 8px;
+  background-color: #f4fbf4;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.jobs-aside h2 {
+  margin-top: 0;
+  font-size: 1.2em;
+  color: #1b5e20;
+  border-bottom: 2px solid #1b5e20;
+  padding-bottom: 0.3em;
+}
+
+.jobs-main-content {
+  overflow: hidden;
+}
+
+.jobs-section {
+  margin-bottom: 2em;
+  border: 1px solid #e0e0e0;
+  border-left: 5px solid #1b5e20;
+  border-radius: 6px;
+  padding: 1.5em;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.jobs-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fafdfa;
+}
+
+.jobs-section h2 {
+  margin-top: 0;
+  color: #1b5e20;
+  font-size: 1.6em;
+}
+
+.jobs-section h3 {
+  color: #e65100;
+  margin-top: 1em;
+  font-size: 1.1em;
+}
+
+/* Responsive adjustment for compact layouts */
+@media (max-width: 50em) {
+  .jobs-container {
+    flex-direction: column;
+    gap: 1.5em;
+  }
+  
+  .jobs-main-content,
+  .jobs-aside {
+    width: 100%;
+  }
+}
+
+/* ===== PAGE: apply.html (owner: Huy) ===== */
+.apply-form fieldset {
+  min-width: 0;
+  margin: 0 0 1.25em;
+  padding: 0.75em 1em 1em;
+  border: 2px solid #2e7d32;
+  border-radius: 8px;
+}
+
+.apply-form legend {
+  padding: 0 0.5em;
+  font-weight: bold;
+  color: #1b5e20;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em 1em;
+  margin-bottom: 0.9em;
+}
+
+.form-row > label {
+  flex: 0 0 11em;
+  font-weight: bold;
+}
+
+.form-row > input,
+.form-row > select,
+.form-row > textarea {
+  flex: 1 1 14em;
+  max-width: 26em;
+  padding: 0.4em;
+  font: inherit;
+  border: 2px solid #757575;
+  border-radius: 4px;
+}
+
+.apply-form fieldset.choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em 1.5em;
+  margin: 0 0 0.9em;
+  padding: 0;
+  border: none;
+}
+
+.apply-form input:invalid:focus {
+  border-color: #c62828;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1em;
+}
+
+.form-buttons input {
+  padding: 0.6em 1.4em;
+  font: inherit;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-buttons input[type="submit"] {
+  color: #ffffff;
+  background-color: #1b5e20;
+  border: 2px solid #1b5e20;
+}
+
+.form-buttons input[type="submit"]:hover {
+  background-color: #e65100;
+  border-color: #e65100;
+}
+
+.form-buttons input[type="reset"] {
+  color: #1b5e20;
+  background-color: #ffffff;
+  border: 2px solid #1b5e20;
+}
+
+@media (max-width: 40em) {
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-row > label {
+    flex: 0 0 auto;
+  }
+
+  .form-row > input,
+  .form-row > select,
+  .form-row > textarea {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+}
+
+/* ===== PAGE: about.html (owner: Hai) ===== */
+
+
+.about-section {
+  margin-bottom: 2em;
+}
+
+.team-member {
+  margin-bottom: 1em;
+  padding: 0.5em 1em;
+  border-left: 4px solid #1b5e20;
+  background-color: #f4fbf4;
+}
+
+.team-member h3 {
+  color: #1b5e20;
+  margin-bottom: 0.3em;
+}
+
+.member-quote blockquote {
+  margin: 0.5em 0 1em;
+  padding: 0.75em 1em;
+  background-color: #fff8e1;
+  border-left: 4px solid #e65100;
+}
+
+.fun-facts-table {
+  width: 100%;
+  margin: 1em 0;
+  border-collapse: collapse;
+}
+
+.fun-facts-table th,
+.fun-facts-table td {
+  padding: 0.6em;
+  text-align: left;
+  border: 1px solid #cccccc;
+}
+
+.fun-facts-table thead th {
+  color: #ffffff;
+  background-color: #1b5e20;
+}
+
+/* Logo in header */
+.brand a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  text-decoration: none;
+}
