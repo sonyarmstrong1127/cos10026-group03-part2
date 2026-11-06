@@ -102,10 +102,20 @@ CREATE TABLE about (
   student_id         VARCHAR(12)  NOT NULL,
   part1_contribution TEXT         NOT NULL,
   part2_contribution TEXT         NOT NULL,
+  quote_vi           VARCHAR(255) NULL,   -- quote in the member's first language
+  quote_en           VARCHAR(255) NULL,   -- English translation
+  hobby              VARCHAR(100) NULL,
+  favourite_food     VARCHAR(100) NULL,
+  fun_fact           VARCHAR(255) NULL,
   PRIMARY KEY (member_id)
 ) ENGINE=InnoDB;
 
-INSERT INTO about (member_name, student_id, part1_contribution, part2_contribution) VALUES
-('Phan Quang Huy', '106219394', 'Developed the Home and Apply pages; set up GitHub, Jira and Discord.', 'To be updated'),
-('Trần Tấn Nghĩa', '106394660', 'Developed the Jobs page.', 'To be updated'),
-('Lê Phạm Hoàng Hải', '105997220', 'Developed the About Us page.', 'To be updated');
+-- NULL = not provided yet. Fill in with UPDATE about SET ... WHERE member_id = ...;
+INSERT INTO about (member_name, student_id, part1_contribution, part2_contribution,
+                   quote_vi, quote_en, hobby, favourite_food, fun_fact) VALUES
+('Phan Quang Huy', '106219394', 'Developed the Home and Apply pages; set up GitHub, Jira and Discord.', 'To be updated',
+ 'Cười thật lớn, chạy thật nhanh, sống tử tế.', 'Laugh hard, run fast, be kind.', 'Watching F1', 'Nem Nướng', 'I like black coffee'),
+('Trần Tấn Nghĩa', '106394660', 'Developed the Jobs page.', 'To be updated',
+ NULL, NULL, NULL, NULL, NULL),
+('Lê Phạm Hoàng Hải', '105997220', 'Developed the About Us page.', 'To be updated',
+ NULL, NULL, NULL, NULL, NULL);
