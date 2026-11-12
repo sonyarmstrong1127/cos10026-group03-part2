@@ -11,11 +11,8 @@ CSS;
 include 'header.inc';
 ?>
 
-<!--
-  TODO (Part 2):
-  - All HTML validation has been removed on purpose (no required/pattern/maxlength, novalidate on the form).
-  - process_eoi.php must now check every field on the server.
--->
+<!-- HTML validation is turned off on purpose (novalidate, no required/pattern/maxlength):
+     process_eoi.php checks every field on the server. -->
 
   <main id="main-content">
     <h1>Apply for a job</h1>
