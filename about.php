@@ -81,8 +81,11 @@ include 'header.inc';
 
   <article class="member-quote">
     <h3>Lê Phạm Hoàng Hải</h3>
-    <p class="quote-missing" style="color: #555555;"><em>Quote not provided by this member before the submission deadline.</em></p>
-  </article>
+  <blockquote lang="vi">
+    <p>Không bao giờ là quá muộn để học hỏi. Học tập là một hành trình suốt đời.</p>
+  </blockquote>
+  <p><strong>English translation:</strong> It is never too late to learn. Learning is a lifelong journey.</p>
+</article>
 </section>
   
 <!-- Fun Facts -->
@@ -118,9 +121,9 @@ include 'header.inc';
 
       <tr>
         <th scope="row">Lê Phạm Hoàng Hải</th>
-        <td>Not provided</td>
-        <td>Not provided</td>
-        <td>Not provided</td>
+        <td>Watching NBA</td>
+        <td>wellington beef</td>
+        <td>i like sugar cane</td>
       </tr>
     </tbody>
   </table>
