@@ -1,5 +1,7 @@
 <?php
 // jobs.php – Jobs page (owner: Nghia)
+require_once 'settings.php';
+
 $page_title       = 'Job Vacancies';
 $page_description = 'Current job vacancies at Harvest Power, a renewable energy company.';
 $page_keywords    = 'Harvest Power, jobs, careers, renewable energy, engineer, content officer';
@@ -7,21 +9,80 @@ $page_author      = 'Tran Tan Nghia, COS10026 Group 03';
 $current_page     = 'jobs';
 $page_style       = <<<CSS
     .jobs-header-title {
-    color: #1b5e20;
-    border-bottom: 2px solid #1b5e20;
-    padding-bottom: 0.3em;
+        color: #1b5e20;
+        border-bottom: 2px solid #1b5e20;
+        padding-bottom: 0.3em;
+    }
+    .jobs-search-form {
+        margin: 1.5em 0;
+        display: flex;
+        gap: 0.5em;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .jobs-search-input {
+        padding: 0.6em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        flex: 1;
+        min-width: 220px;
+    }
+    .jobs-search-btn {
+        padding: 0.6em 1.2em;
+        background-color: #1b5e20;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .jobs-search-btn:hover {
+        background-color: #144618;
+    }
+    .jobs-clear-link {
+        color: #1b5e20;
+        text-decoration: underline;
+        margin-left: 0.5em;
     }
 CSS;
 include 'header.inc';
-?>
 
-<!--
-  TODO (Part 2):
-  - Read the jobs from the jobs table (see harvest_power.sql) and print each job with a PHP loop,
-  -   instead of the two hard-coded <section class="jobs-section"> blocks below.
-  - Add a search bar on this page that searches the jobs table (e.g. GET jobs.php?q=engineer or search.php).
-  - Remember: escape every value printed from the database with htmlspecialchars().
--->
+// Capture and sanitize the search query
+$search_query = isset($_GET['q']) ? trim($_GET['q']) : '';
+$jobs = [];
+$db_error = '';
+
+// Connect to the database (assumes $host, $user, $pwd, $sql_db from settings.php)
+$conn = @mysqli_connect($host, $user, $pwd, $sql_db);
+
+if (!$conn) {
+    $db_error = "Unable to connect to the database. Please try again later.";
+} else {
+    if ($search_query !== '') {
+        // Search across title, reference number, and description using prepared statements
+        $sql = "SELECT * FROM jobs 
+                WHERE title LIKE ? 
+                   OR job_ref LIKE ? 
+                   OR short_description LIKE ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        $like_param = '%' . $search_query . '%';
+        mysqli_stmt_bind_param($stmt, 'sss', $like_param, $like_param, $like_param);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+    } else {
+        // Fetch all jobs if no search term is entered
+        $sql = "SELECT * FROM jobs";
+        $result = mysqli_query($conn, $sql);
+    }
+
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $jobs[] = $row;
+        }
+        mysqli_free_result($result);
+    }
+    mysqli_close($conn);
+}
+?>
 
   <main id="main-content" class="jobs-container">
 
@@ -39,61 +100,67 @@ include 'header.inc';
       <h1 class="jobs-header-title">Career Opportunities in Clean Energy</h1>
       <p>Join our mission to strengthen renewable technologies, manage smart grids, and deliver public engagement initiatives for clean energy solutions.</p>
 
-      <!-- Position 1: Section structural element -->
-      <section class="jobs-section">
-        <h2>Renewable Energy Systems Engineer</h2>
-        
-        <p><strong>Job Reference Number:</strong> <code style="background-color: #f0f0f0; padding: 0.2em 0.4em; border-radius: 3px;">RE109</code></p>
-        
-        <p><strong>Short Description:</strong> We are looking for a skilled engineer to build, optimize, and evaluate commercial solar and wind infrastructure platforms while maintaining clean system data workflows.</p>
-        
-        <h3>Role Position Details</h3>
-        <ul>
-          <li><strong>Salary:</strong> $95,000 - $112,000 AUD per annum</li>
-          <li><strong>Reporting Line:</strong> Reports directly to the Principal Projects Director</li>
-        </ul>
+      <!-- Search Form -->
+      <form method="get" action="jobs.php" class="jobs-search-form" role="search">
+        <label for="job-search" class="visually-hidden">Search jobs:</label>
+        <input 
+          type="text" 
+          id="job-search" 
+          name="q" 
+          class="jobs-search-input"
+          placeholder="Search by role, keyword, or ref (e.g., RE109)..." 
+          value="<?php echo htmlspecialchars($search_query); ?>"
+        >
+        <button type="submit" class="jobs-search-btn">Search</button>
+        <?php if ($search_query !== ''): ?>
+          <a href="jobs.php" class="jobs-clear-link">Clear</a>
+        <?php endif; ?>
+      </form>
 
-        <h3>Key Responsibilities</h3>
-        <ol>
-          <li>Design and test operational models for commercial clean energy integration.</li>
-          <li>Collaborate with web developers to present real-time performance analytics on community portals.</li>
-          <li>Review public safety protocols and system security updates systematically.</li>
-        </ol>
+      <?php if ($db_error !== ''): ?>
+        <p class="error-message"><?php echo htmlspecialchars($db_error); ?></p>
+      <?php elseif (empty($jobs)): ?>
+        <p>No job vacancies found matching "<strong><?php echo htmlspecialchars($search_query); ?></strong>".</p>
+      <?php else: ?>
+        <?php foreach ($jobs as $job): ?>
+          <section class="jobs-section">
+            <h2><?php echo htmlspecialchars($job['title']); ?></h2>
+            
+            <p><strong>Job Reference Number:</strong> <code style="background-color: #f0f0f0; padding: 0.2em 0.4em; border-radius: 3px;"><?php echo htmlspecialchars($job['job_ref']); ?></code></p>
+            
+            <p><strong>Short Description:</strong> <?php echo htmlspecialchars($job['short_description']); ?></p>
+            
+            <h3>Role Position Details</h3>
+            <ul>
+              <li><strong>Salary:</strong> <?php echo htmlspecialchars($job['salary']); ?></li>
+              <li><strong>Reporting Line:</strong> <?php echo htmlspecialchars($job['reporting_line']); ?></li>
+            </ul>
 
-        <h3>Position Requirements</h3>
-        <ul>
-          <li><strong>Essential:</strong> Bachelor’s degree in Engineering or Renewable Technologies, and 2+ years of grid-modeling experience.</li>
-          <li><strong>Preferable:</strong> Familiarity with smart-grid monitoring tools and collaborative project management spaces like Jira.</li>
-        </ul>
-      </section>
+            <h3>Key Responsibilities</h3>
+            <ul>
+              <?php 
+              // Splits newline-separated items from the database into list items
+              $responsibilities = array_filter(explode("\n", $job['responsibilities']));
+              foreach ($responsibilities as $item): 
+              ?>
+                <li><?php echo htmlspecialchars(trim($item)); ?></li>
+              <?php endforeach; ?>
+            </ul>
 
-      <!-- Position 2: Section structural element -->
-      <section class="jobs-section">
-        <h2>Digital Engagement Content Officer</h2>
-        <p><strong>Job Reference Number:</strong> <code style="background-color: #f0f0f0; padding: 0.2em 0.4em; border-radius: 3px;">CO482</code></p>
-        
-        <p><strong>Short Description:</strong> Drive public engagement initiatives by maintaining our suite of client-facing platforms, writing clean environmental impact copy, and managing accessible campaign data structures.</p>
-        
-        <h3>Role Position Details</h3>
-        <ul>
-          <li><strong>Salary:</strong> $72,000 - $81,000 AUD per annum</li>
-          <li><strong>Reporting Line:</strong> Reports directly to the Communications Strategy Manager</li>
-        </ul>
-
-        <h3>Key Responsibilities</h3>
-        <ul>
-          <li>Author accessible web copy detailing our latest project landmarks and carbon-neutral targets.</li>
-          <li>Liaise directly with front-end technical groups to maintain structural page elements without broken links.</li>
-          <li>Coordinate public community webinars focused on neighborhood green solutions.</li>
-        </ul>
-
-        <h3>Position Requirements</h3>
-        <ul>
-          <li><strong>Essential:</strong> Proven baseline background in corporate communications, clear writing mechanics, and fundamental awareness of web layout structures.</li>
-          <li><strong>Preferable:</strong> Prior work experience inside a sustainable energy environment, or working knowledge of basic WCAG web readability strategies.</li>
-        </ul>
-      </section>
+            <h3>Position Requirements</h3>
+            <ul>
+              <li><strong>Essential:</strong> <?php echo htmlspecialchars($job['essential_req']); ?></li>
+              <li><strong>Preferable:</strong> <?php echo htmlspecialchars($job['preferable_req']); ?></li>
+            </ul>
+          </section>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
+
+  </main>
+
+<?php include 'footer.inc'; ?>
+
 
     </main>
 
