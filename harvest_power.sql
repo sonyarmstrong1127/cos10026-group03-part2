@@ -6,6 +6,7 @@
 CREATE DATABASE IF NOT EXISTS harvest_power
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE harvest_power;
+SET NAMES utf8mb4;   -- read this file as UTF-8 (Vietnamese names)
 
 -- ---------------------------------------------------------------
 -- jobs: one row per job, fields match the Part 1 jobs page.
@@ -92,8 +93,8 @@ INSERT INTO users (username, password_hash) VALUES
 ('admin', '$2y$10$WLVUS7VPlVrrMWDWiWqHeukq3KdQ2jUB.luPuKraX58GQJKYMQOJ6');
 
 -- ---------------------------------------------------------------
--- about: team members and what each one did in Part 1 and Part 2.
--- Update part2_contribution before submitting.
+-- about: team members, what each one did in Part 1 and Part 2,
+-- their quote (first language + English) and fun facts. Shown on about.php.
 -- ---------------------------------------------------------------
 DROP TABLE IF EXISTS about;
 CREATE TABLE about (
@@ -113,13 +114,15 @@ CREATE TABLE about (
 -- NULL = not provided yet. Fill in with UPDATE about SET ... WHERE member_id = ...;
 INSERT INTO about (member_name, student_id, part1_contribution, part2_contribution,
                    quote_vi, quote_en, hobby, favourite_food, fun_fact) VALUES
-('Phan Quang Huy', '106219394', 'Developed the Home and Apply pages; set up GitHub, Jira and Discord.', 'To be updated',
+('Phan Quang Huy', '106219394', 'Developed the Home and Apply pages; set up GitHub, Jira and Discord.',
+ 'Set up the Part 2 structure (include files, settings and database script); developed process_eoi.php and manage.php; loaded the About page from the database; coordinated GitHub, Jira and Discord.',
  'Cười thật lớn, chạy thật nhanh, sống tử tế.', 'Laugh hard, run fast, be kind.', 'Watching F1', 'Nem Nướng', 'I like black coffee'),
-('Trần Tấn Nghĩa', '106394660', 'Developed the Jobs page.', 'To be updated',
+('Trần Tấn Nghĩa', '106394660', 'Developed the Jobs page.',
+ 'Loaded the Jobs page from the database and added the job search bar.',
  'Bạn bỏ lỡ 100% những cú sút mà bạn không thực hiện. – Wayne Gretzky', 'You miss 100% of the shots you don''t take. – Wayne Gretzky',
  'Playing badminton', 'Pizza', 'I tend to forget things easily'),
-('Lê Phạm Hoàng Hải', '105997220', 'Developed the About Us page.', 'To be updated',
- 'Sự vĩ đại không được xây nên trong khoảnh khắc chiến thắng, mà từ kỷ luật để tiếp tục khi không ai nhìn thấy.',
- 'Greatness is not built in moments of victory, but in the discipline to keep going when nobody is watching.',
- 'Playing basketball (Point Guard and Shooting Guard)', NULL,
- 'I have played basketball for about 7 years and look up to Stephen Curry');
+('Lê Phạm Hoàng Hải', '105997220', 'Developed the About Us page.',
+ 'Developed the manager login with hashed passwords (login.php).',
+ 'Không bao giờ là quá muộn để học hỏi. Học tập là một hành trình suốt đời.',
+ 'It is never too late to learn. Learning is a lifelong journey.',
+ 'Watching NBA', 'Beef Wellington', 'I like sugar cane');
