@@ -53,6 +53,7 @@ $db_error = '';
 
 // Connect to the database (assumes $host, $user, $pwd, $sql_db from settings.php)
 $conn = @mysqli_connect($host, $user, $pwd, $sql_db);
+if ($conn) { mysqli_set_charset($conn, 'utf8mb4'); }
 
 if (!$conn) {
     $db_error = "Unable to connect to the database. Please try again later.";
@@ -70,7 +71,7 @@ if (!$conn) {
         $result = mysqli_stmt_get_result($stmt);
     } else {
         // Fetch all jobs if no search term is entered
-        $sql = "SELECT * FROM jobs";
+        $sql = "SELECT * FROM jobs ORDER BY job_ref";
         $result = mysqli_query($conn, $sql);
     }
 
@@ -133,11 +134,12 @@ if (!$conn) {
             <h3>Role Position Details</h3>
             <ul>
               <li><strong>Salary:</strong> <?php echo htmlspecialchars($job['salary']); ?></li>
-              <li><strong>Reporting Line:</strong> <?php echo htmlspecialchars($job['reporting_line']); ?></li>
+              <li><strong>Reporting Line:</strong> <?php echo htmlspecialchars($job['reports_to']); ?></li>
             </ul>
 
             <h3>Key Responsibilities</h3>
-            <ul>
+            <?php $list_tag = $job['responsibilities_ordered'] ? 'ol' : 'ul'; ?>
+            <<?php echo $list_tag; ?>>
               <?php 
               // Splits newline-separated items from the database into list items
               $responsibilities = array_filter(explode("\n", $job['responsibilities']));
@@ -145,12 +147,12 @@ if (!$conn) {
               ?>
                 <li><?php echo htmlspecialchars(trim($item)); ?></li>
               <?php endforeach; ?>
-            </ul>
+            </<?php echo $list_tag; ?>>
 
             <h3>Position Requirements</h3>
             <ul>
-              <li><strong>Essential:</strong> <?php echo htmlspecialchars($job['essential_req']); ?></li>
-              <li><strong>Preferable:</strong> <?php echo htmlspecialchars($job['preferable_req']); ?></li>
+              <li><strong>Essential:</strong> <?php echo htmlspecialchars($job['essential']); ?></li>
+              <li><strong>Preferable:</strong> <?php echo htmlspecialchars($job['preferable']); ?></li>
             </ul>
           </section>
         <?php endforeach; ?>
@@ -158,10 +160,5 @@ if (!$conn) {
     </div>
 
   </main>
-
-<?php include 'footer.inc'; ?>
-
-
-    </main>
 
 <?php include 'footer.inc'; ?>
